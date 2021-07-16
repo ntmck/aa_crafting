@@ -22,7 +22,6 @@ fn begin(json: JsonValue) {
     print!("Cost of materials in total: \t{}\n", f64_to_gsc(&mat_total));
     print!("Expected Profit: \t\t{}\n", f64_to_gsc(&(expected - mat_total)));
     print!("{}\n", get_individual_material_qty_and_cost_string(&json));
-    assert!(false);
 }
 
 fn calculate_total_material_cost(json: &JsonValue) -> f64 {
