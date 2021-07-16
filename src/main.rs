@@ -80,7 +80,8 @@ fn get_individual_material_qty_and_cost_string(json: &JsonValue) -> String {
         let name = json["materials_per_craft"][i]["mat_name"].as_str().unwrap();
         let qty = json["materials_per_craft"][i]["qty"].as_usize().unwrap();
         let price_per =  json["materials_per_craft"][i]["price_per"].as_f64().unwrap();
-        let total = price_per * qty as f64;
+        let num_crafts =  json["num_crafts_wanted"].as_usize().unwrap();
+        let total = price_per * qty as f64 * num_crafts as f64;
         print!("\t{:align$} :: Qty: {:6} :: Price Per Unit: {:10} :: Total: {:30}\n", name, qty, f64_to_gsc(&price_per), f64_to_gsc(&total), align = align);
     }
     result
