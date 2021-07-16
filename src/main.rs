@@ -32,7 +32,7 @@ fn calculate_total_material_cost(json: &JsonValue) -> f64 {
         total += per * qty as f64;
     }
     let num_crafts_wanted = json["num_crafts_wanted"].as_usize().unwrap();
-    total * num_crafts_wanted as f64;
+    total * num_crafts_wanted as f64
 }
 
 fn get_total_labor_cost(json: &JsonValue) -> usize {
