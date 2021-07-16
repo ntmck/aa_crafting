@@ -222,7 +222,7 @@ fn test_caclulate_total_material_cost() {
     assert!(total == 6.0, "actual: {}", total);
 
     let total = calculate_total_material_cost(&json::parse(&TEST_JSON_2).unwrap());
-    assert!(total == 121.1988, "actual: {}", total);
+    assert!(total == 6059.9400000000005, "actual: {}", total);
 }
 
 #[test]
