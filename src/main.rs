@@ -5,8 +5,7 @@ use std::vec::Vec;
 use json::JsonValue;
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
-    begin(read_json(&args[1]));
+    begin(read_json(&env::args().collect::<Vec<String>>()[1]));
 }
 
 fn begin(json: JsonValue) {
@@ -21,7 +20,7 @@ fn begin(json: JsonValue) {
     print!("Expected selling total: \t{}\n", f64_to_gsc(&expected));
     print!("Cost of materials in total: \t{}\n", f64_to_gsc(&mat_total));
     print!("Expected Profit: \t\t{}\n", f64_to_gsc(&(expected - mat_total)));
-    print!("{}\n", get_individual_material_qty_and_cost_string(&json));
+    print_individual_material_qty_and_cost_string(&json);
 }
 
 fn calculate_total_material_cost(json: &JsonValue) -> f64 {
@@ -32,13 +31,13 @@ fn calculate_total_material_cost(json: &JsonValue) -> f64 {
         total += per * qty as f64;
     }
     let num_crafts_wanted = json["num_crafts_wanted"].as_usize().unwrap();
-    total * num_crafts_wanted as f64
+    (total * num_crafts_wanted as f64)
 }
 
 fn get_total_labor_cost(json: &JsonValue) -> usize {
     let labor_per_craft: usize = json["cost_of_labor_per_craft"].as_usize().unwrap();
     let crafts: usize = json["num_crafts_wanted"].as_usize().unwrap();
-    crafts * labor_per_craft
+    (crafts * labor_per_craft)
 }
 
 fn get_selling_total(json: &JsonValue) -> f64 {
@@ -73,8 +72,7 @@ fn f64_to_gsc(value: &f64) -> String {
     gsc
 }
 
-fn get_individual_material_qty_and_cost_string(json: &JsonValue) -> String {
-    let result = String::new();
+fn print_individual_material_qty_and_cost_string(json: &JsonValue) {
     let align = longest_name_len(json);
     for i in 0..json["materials_per_craft"].len() {
         let name = json["materials_per_craft"][i]["mat_name"].as_str().unwrap();
@@ -82,9 +80,8 @@ fn get_individual_material_qty_and_cost_string(json: &JsonValue) -> String {
         let price_per =  json["materials_per_craft"][i]["price_per"].as_f64().unwrap();
         let num_crafts =  json["num_crafts_wanted"].as_usize().unwrap();
         let total = price_per * qty as f64 * num_crafts as f64;
-        print!("\t{:align$} :: Qty: {:6} :: Price Per Unit: {:10} :: Total: {:30}\n", name, qty, f64_to_gsc(&price_per), f64_to_gsc(&total), align = align);
+        print!("\t{:align$} :: Qty: {:6} :: Qty Total: {:6} :: Price Per Unit: {:10} :: Total: {:30}\n", name, qty, qty * num_crafts ,f64_to_gsc(&price_per), f64_to_gsc(&total), align = align);
     }
-    result
 }
 
 fn longest_name_len(json: &JsonValue) -> usize {
@@ -236,6 +233,6 @@ fn test_total_labor_cost() {
 
 #[test]
 fn test_begin() {
-    //begin(json::parse(&TEST_JSON).unwrap());
+    begin(json::parse(&TEST_JSON).unwrap());
     begin(json::parse(&TEST_JSON_2).unwrap());
 }
